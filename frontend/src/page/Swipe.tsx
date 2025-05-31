@@ -40,9 +40,9 @@ const Card: React.FC<{
   triggerSwipe(swipe);
 
   const bind = useGesture({
-    onDrag: ({ down, movement: [mx], direction: [xDir], velocity: [vx] }) => {
+    onDrag: ({ down, movement: [mx], velocity: [vx] }) => {
       const trigger = Math.abs(vx) > 0.3 || Math.abs(mx) > 120;
-      const dir = xDir > 0 ? "right" : "left";
+      const dir = mx > 0 ? "right" : "left";
 
       if (!down && trigger) {
         swipe(dir);
@@ -91,7 +91,7 @@ const Swipe: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-secondary">
-      <div>
+      <div className="flex flex-col items-center justify-center">
         <button
           onClick={() => swipeFuncRef.current?.("left")}
           className="absolute top-2/5 left-[20%] -translate-y-1/2 z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
@@ -99,7 +99,7 @@ const Swipe: React.FC = () => {
           <GoChevronLeft size={24} />
         </button>
 
-        <div className="relative w-[300px] h-[400px] mb-8">
+        <div className="relative w-[300px] h-[400px] mb-8  flex items-center justify-center">
           {cards.map((card, index) => (
             <Card
               key={card.id}
@@ -127,6 +127,9 @@ const Swipe: React.FC = () => {
         </button>
 
         <div className="mt-6 text-center">
+          <div className="text-primary text-xl">
+            Swipe right if your heart says yes, left if it whispers no.
+          </div>
           <p className="text-gray-700 font-medium">Liked IDs:</p>
           <p>{liked.length ? liked.join(", ") : "none"}</p>
         </div>
