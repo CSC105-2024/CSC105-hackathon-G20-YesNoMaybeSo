@@ -39,3 +39,4 @@ export const isRoundCompleted = async (roundId: number) => {
 
     return users.length > 0 && users.every(u => u.isComplete);
 };
+

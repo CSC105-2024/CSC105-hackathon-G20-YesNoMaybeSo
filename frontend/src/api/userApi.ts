@@ -43,3 +43,17 @@ export const getprofile = async () => {
     };
   }
 };
+
+export const getProfile = async () => {
+  const data = await Axios.get("/user/getprofile", { withCredentials: true });
+  return data.data;
+};
+
+export const updateUsername = async (newUsername: string) => {
+  const data = await Axios.put(
+    "/user/updateusername",
+    { username: newUsername },
+    { withCredentials: true }
+  );
+  return data.data;
+};
