@@ -8,7 +8,7 @@ export default function ProtectedLanding() {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await Axios.get("/user/me", { withCredentials: true });
+        const res = await Axios.get("/user/getprofile", { withCredentials: true });
         if (res.data.success) {
           navigate("/home");
         } else {

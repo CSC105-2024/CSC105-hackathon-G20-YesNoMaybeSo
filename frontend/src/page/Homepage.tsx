@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '../components/NavBar'
 import { useNavigate } from "react-router-dom";
 
-
 function Homepage() {
   const navigate = useNavigate();
 
@@ -14,11 +13,11 @@ function Homepage() {
 
       <NavBar />
 
-      <div className="flex justify-center items-center  z-0">
+      <div className="min-h-screen flex justify-center items-center  z-0">
         <div className="flex justify-center items-center">
           <div className="flex flex-col gap-6">
             <button
-              onClick={() => navigate("/addnewcategory")}
+              onClick={() => navigate("/category")}
               className="bg-white text-black font-semibold px-12 py-15 rounded-lg shadow border hover:bg-gray-100 transition"
             >
               Create

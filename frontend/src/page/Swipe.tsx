@@ -91,15 +91,17 @@ const Swipe: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-secondary">
-      <div className="flex flex-col items-center justify-center">
+      <div className="relative w-[300px] h-[400px] flex items-center justify-center mb-8">
         <button
           onClick={() => swipeFuncRef.current?.("left")}
-          className="absolute top-2/5 left-[20%] -translate-y-1/2 z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
+          className="hidden md:flex absolute top-2/5 left-[-50%] z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
         >
           <GoChevronLeft size={24} />
         </button>
-
-        <div className="relative w-[300px] h-[400px] mb-8  flex items-center justify-center">
+        <div className="realative rounded-2xl w-full h-full bg-white shadow">
+          <div className="absolute rounded-2xl w-full h-full bg-white rotate-12 shadow"></div>
+          <div className="absolute rounded-2xl w-full h-full bg-white rotate-6 shadow"></div>
+          <div className="absolute rounded-2xl w-full h-full bg-white rotate- shadow"></div>
           {cards.map((card, index) => (
             <Card
               key={card.id}
@@ -118,21 +120,19 @@ const Swipe: React.FC = () => {
             </div>
           )}
         </div>
-
         <button
           onClick={() => swipeFuncRef.current?.("right")}
-          className="absolute top-2/5 right-[20%] -translate-y-1/2 z-10 sm:mr-4 border-3 border-accent text-accent sm:p-2 p-1 rounded-full"
+          className="hidden md:flex absolute top-2/5 right-[-50%] z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
         >
           <GoChevronRight size={24} />
         </button>
-
-        <div className="mt-6 text-center">
-          <div className="text-primary text-xl">
-            Swipe right if your heart says yes, left if it whispers no.
-          </div>
-          <p className="text-gray-700 font-medium">Liked IDs:</p>
-          <p>{liked.length ? liked.join(", ") : "none"}</p>
+      </div>
+      <div className="mt-6 text-center">
+        <div className="text-primary text-xl">
+          Swipe right if your heart says yes, left if it whispers no.
         </div>
+        {/* <p className="text-gray-700 font-medium">Liked IDs:</p>
+          <p>{liked.length ? liked.join(", ") : "none"}</p> */}
       </div>
     </div>
   );

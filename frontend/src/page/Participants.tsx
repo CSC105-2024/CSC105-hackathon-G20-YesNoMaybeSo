@@ -35,7 +35,7 @@ const Participants: React.FC = () => {
       users: users.filter((u) => u.title.trim() !== ""),
     };
 
-    console.log("📦 Category Data:", data);
+    console.log("Category Data:", data);
     //Axios.post("/api/category", data)
   };
 
@@ -77,7 +77,6 @@ const Participants: React.FC = () => {
                       </div>
                     ) : (
                       <div className="bg-accent mt-2 text-sm font-medium text-white  px-3 py-1 rounded-full w-fit mx-auto">
-                        {" "}
                         Waiting
                       </div>
                     )}

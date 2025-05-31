@@ -2,11 +2,10 @@ import React from 'react'
 import NavBar from '../components/NavBar';
 
 function CategoryItem() {
-
   const List = () => (
     <div className="w-full max-w-[500px] h-[150px] bg-secondary rounded-2xl shadow-md p-4 sm:p-6 flex md:flex-row gap-4 sm:gap-16 justify-center items-center">
       <div className="flex justify-center items-center">
-        <div className="text-center text-primary text-2xl font-bold ">
+        <div className="text-center text-primary text-2xl font-bold">
           Takogaki
         </div>
       </div>

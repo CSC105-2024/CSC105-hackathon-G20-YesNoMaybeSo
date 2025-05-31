@@ -36,7 +36,7 @@ const EnterMember: React.FC = () => {
       items: item.filter((i) => i.title.trim() !== ""),
     };
 
-    console.log("📦 Category Data:", data);
+    console.log("Category Data:", data);
     //Axios.post("/api/category", data)
 
     navigate("/participants");
