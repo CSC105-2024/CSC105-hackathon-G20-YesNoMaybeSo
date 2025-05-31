@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Users {
+  id        Int     @id @default(autoincrement())
+  Username  String  @unique
+  Password  String
+
+  Groups        Groups[]
+  RoundUsers    Round_User[]
+  Results       Result[]
+}
+
+model Groups {
+  GroupId    Int    @id @default(autoincrement())
+  GroupName  String
+  User       Users   @relation(fields: [UserId], references: [id])
+  UserId     Int
+
+  GroupItems GroupItem[]
+  Rounds     Round[]
+}
+
+model Item {
+  id        Int     @id @default(autoincrement())
+  ItemName  String
+
+  GroupItems GroupItem[]
+  Results    Result[]
+}
+
+model GroupItem {
+  id        Int   @id @default(autoincrement())
+  Group     Groups @relation(fields: [GroupId] ,  references: [GroupId])
+  GroupId   Int
+  Item      Item  @relation(fields: [ItemId], references: [id])
+  ItemId    Int
+}
+
+model Round {
+  RoundId     Int     @id @default(autoincrement())
+  isStarted   Boolean @default(false)
+  Group       Groups   @relation(fields: [GroupId], references: [GroupId])
+  GroupId     Int
+
+  RoundUsers  Round_User[]
+  Results     Result[]
+}
+
+model Round_User {
+  id         Int    @id @default(autoincrement())
+  Round      Round  @relation(fields: [RoundId], references: [RoundId])
+  RoundId    Int
+  User       Users   @relation(fields: [UserId], references: [id])
+  UserId     Int
+  isComplete Boolean @default(false)
+  isJoined   Boolean @default(false)
+}
+
+model Result {
+  id       Int    @id @default(autoincrement())
+  Round    Round  @relation(fields: [RoundId], references: [RoundId])
+  RoundId  Int
+  User     Users   @relation(fields: [UserId], references: [id])
+  UserId   Int
+  Item     Item   @relation(fields: [ItemId], references: [id])
+  ItemId   Int
+}
