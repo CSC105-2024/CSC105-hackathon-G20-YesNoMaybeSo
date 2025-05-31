@@ -5,3 +5,4 @@ export const authRouter = new Hono();
 
 authRouter.post("/register", authController.Register);
 authRouter.post("/login", authController.Login);
+authRouter.get("/logout", authController.Logout);
