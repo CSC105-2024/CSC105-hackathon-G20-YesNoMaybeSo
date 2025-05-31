@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '../components/NavBar'
 import { useNavigate } from "react-router-dom";
 
-
 function Homepage() {
   const navigate = useNavigate();
 

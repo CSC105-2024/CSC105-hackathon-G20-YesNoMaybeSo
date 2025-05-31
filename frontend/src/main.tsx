@@ -14,66 +14,120 @@ import Participants from "./page/Participants";
 import Profile from "./page/Profile";
 import Swipe from "./page/Swipe";
 import Waiting from "./page/Waiting";
-import WaitngResult from "./page/waitingresult";
+import WaitngResult from "./page/WaitingResult";
+import Category from "./page/Category";
+import ProtectedLanding from "./page/ProtectedLanding";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: < Homepage />,
+    element: <ProtectedLanding />,
   },
   {
     path: "/home",
-    element: < Homepage />,
+    element: (
+      <ProtectedRoute>
+        <Homepage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/addnewcategory",
-    element: < AddNewCategory />,
+    element: (
+      <ProtectedRoute>
+        <AddNewCategory />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/categoryitem",
-    element: < CategoryItem />,
+    element: (
+      <ProtectedRoute>
+        <CategoryItem />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/directswipe",
-    element: < DirectSwipe />,
+    element: (
+      <ProtectedRoute>
+        <DirectSwipe />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/entermember",
-    element: < EnterMember />,
+    element: (
+      <ProtectedRoute>
+        <EnterMember />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/login",
-    element: < Login />,
+    element: <Login />,
   },
   {
     path: "/register",
-    element: < Register />,
+    element: <Register />,
   },
   {
     path: "/match",
-    element: < Match />,
+    element: (
+      <ProtectedRoute>
+        <Match />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/participants",
-    element: < Participants />,
+    element: (
+      <ProtectedRoute>
+        <Participants />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/profile",
-    element: < Profile />,
+    element: (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/swipe",
-    element: < Swipe />,
+    element: (
+      <ProtectedRoute>
+        <Swipe />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/waiting",
-    element: < Waiting />,
+    element: (
+      <ProtectedRoute>
+        <Waiting />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/waitingresult",
-    element: < WaitngResult />,
+    element: (
+      <ProtectedRoute>
+        <WaitngResult />
+      </ProtectedRoute>
+    ),
   },
-  
+  {
+    path: "/category",
+    element: (
+      <ProtectedRoute>
+        <Category />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 export default function AppRouter() {

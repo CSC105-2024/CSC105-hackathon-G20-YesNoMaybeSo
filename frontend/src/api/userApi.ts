@@ -25,3 +25,21 @@ export const loginUser = async (username: string, password: string) => {
     throw e;
   }
 };
+
+export const getprofile = async () => {
+  try {
+    const response = await Axios.get("/user/getprofile", {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      success: false,
+      data: null,
+    };
+  }
+};
