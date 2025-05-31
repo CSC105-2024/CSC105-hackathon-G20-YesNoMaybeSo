@@ -36,3 +36,14 @@ export const getUserByUsername = async(userName: string) => {
     })
     return user
 }
+
+export const editUserName = async(userId: number, userName: string) => {
+    const user = await db.users.update({
+        where: {
+            id: userId,
+        }, data: {
+            Username: userName,
+        }
+    })
+    return user;
+}

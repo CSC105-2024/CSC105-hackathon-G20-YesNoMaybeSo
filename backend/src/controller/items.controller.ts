@@ -36,3 +36,17 @@ export const deleteItem = async (c: Context) => {
         return c.json(JsonResponse(false, "Internal Server Error", e), 500);
     }
 };
+
+export const getItemsByRoundId = async (c: Context) => {
+    try {
+      const roundId = Number(c.req.param("roundId"));
+      if (isNaN(roundId)) {
+        return c.json(JsonResponse(false, "Invalid roundId"), 400);
+      }
+  
+      const items = await itemsModel.getItemsByRoundId(roundId);
+      return c.json(JsonResponse(true, "Fetched items", items), 200);
+    } catch (e) {
+      return c.json(JsonResponse(false, "Failed to fetch items", e), 500);
+    }
+  };

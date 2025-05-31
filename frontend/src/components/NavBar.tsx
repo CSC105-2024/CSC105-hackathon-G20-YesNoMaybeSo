@@ -10,6 +10,10 @@ export default function NavBar() {
     navigate("/login");
   };
 
+  const handleProfile = () => {
+    navigate("/profile");
+  };
+
   return (
     <nav className="flex justify-between p-5 w-full h-16 items-center shadow-md bg-white z-[9999] relative">
       <NavLink to="/" className="text-black sm:text-xl text-lg font-bold">
@@ -26,6 +30,12 @@ export default function NavBar() {
 
         {dropdownProfileOpen && (
           <div className="absolute right-0 mt-2 w-40 bg-white text-black shadow-lg rounded-lg z-[9999]">
+            <button
+              onClick={handleProfile}
+              className="block px-4 py-2 w-full text-left hover:bg-gray-100 transition"
+            >
+              Profile
+            </button>
             <button
               onClick={handleLogout}
               className="block px-4 py-2 w-full text-left hover:bg-gray-100 transition"
