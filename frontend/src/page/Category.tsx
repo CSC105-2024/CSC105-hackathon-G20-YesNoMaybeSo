@@ -32,8 +32,8 @@ function Category() {
             + Add New Category
           </div>
 
-          {categories.map((cat, index) => (
-            <CategoryComponent key={index} id={index} name={cat} />
+          {categories.map((cate, index) => (
+            <CategoryComponent key={index} id={index} name={cate} />
           ))}
         </div>
       </div>
