@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import { foods } from "../mockdata/mockData";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getItemsInGroup } from "../api/groupItemApi";
+import { getGroupById } from "../api/groupApi";
 
-function CategoryItem() {
-  const foodMoc = foods.result;
+interface Item {
+  id: number;
+  ItemName: string;
+}
+
+const CategoryItem: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [groupName, setGroupName] = useState<string>("Category Items");
+  const { id } = useParams(); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchItemsAndGroup = async () => {
+      if (!id) return;
+      const groupId = parseInt(id);
+      const groupData = await getGroupById(groupId);
+      if (groupData?.GroupName) {
+        setGroupName(groupData.GroupName);
+      }
+      const res = await getItemsInGroup(groupId);
+      if (res.success) {
+        setItems(res.data);
+      }
+    };
+
+    fetchItemsAndGroup();
+  }, [id]);
 
   return (
     <>
@@ -17,18 +42,18 @@ function CategoryItem() {
 
       <div className="flex justify-center items-center m-4 my-12">
         <div className="text-center justify-center text-accent text-4xl font-bold ">
-          Japanese food
+          {groupName}
         </div>
       </div>
 
       <div className="flex justify-center items-center">
-        <div className="MiddleContainer gap-4 sm:w-[90%] md:w-[50%] h-[auto] max-h-[600px] overflow-y-auto bg-white rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
-          {foodMoc.map((food, index) => (
+        <div className="MiddleContainer gap-4 sm:w-[90%] md:w-[50%] max-h-[600px] overflow-y-auto bg-white rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
+          {items.map((item) => (
             <div
-              key={index}
+              key={item.id}
               className="w-full bg-secondary text-center py-10 rounded-xl text-primary font-bold text-xl "
             >
-              {food.name}
+              {item.ItemName}
             </div>
           ))}
         </div>
@@ -46,6 +71,6 @@ function CategoryItem() {
       </div>
     </>
   );
-}
+};
 
 export default CategoryItem;
