@@ -14,7 +14,8 @@ import Participants from "./page/Participants";
 import Profile from "./page/Profile";
 import Swipe from "./page/Swipe";
 import Waiting from "./page/Waiting";
-import WaitngResult from "./page/waitingresult";
+import WaitngResult from "./page/WaitingResult";
+import Category from "./page/Category";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
   {
     path: "/waitingresult",
     element: < WaitngResult />,
+  },
+  {
+    path: "/category",
+    element: < Category />,
   },
   
 ]);
