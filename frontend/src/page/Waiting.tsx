@@ -1,11 +1,29 @@
-import React from 'react'
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { checkAllCompleted } from "../api/roundUserApi";
 
-function Waiting() {
+const WaitingResult = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { roundId } = location.state || {};
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const res = await checkAllCompleted(roundId);
+      if (res.success && res.data === true) {
+        clearInterval(interval);
+        navigate("/match", { state: { roundId } });
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [roundId]);
+
   return (
-    <div className='w-screen h-screen bg-secondary justify-center items-center flex font-bold text-3xl text-7xl text-accent'>
-      Waiting for room ...
+    <div className="flex flex-col items-center justify-center h-screen text-xl text-primary">
+      Waiting for others to finish swiping...
     </div>
-  )
-}
+  );
+};
 
-export default Waiting
+export default WaitingResult;
