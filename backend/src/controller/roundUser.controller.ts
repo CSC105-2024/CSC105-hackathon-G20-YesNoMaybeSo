@@ -76,11 +76,12 @@ export const getUsersInRound = async (c: Context) => {
 export const markUserComplete = async (c: Context) => {
   try {
     const id = Number(c.req.param("id"));
+    const userId = c.get("userId") as number;
     if (isNaN(id)) {
       return c.json(JsonResponse(false, "Invalid roundUserId"), 400);
     }
 
-    const result = await roundUserModel.markUserComplete(id);
+    const result = await roundUserModel.markUserComplete(userId, id);
     return c.json(JsonResponse(true, "User completed!", result), 200);
   } catch (e) {
     return c.json(JsonResponse(false, "Internal Server Error", e), 500);

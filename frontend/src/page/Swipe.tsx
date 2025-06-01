@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSpring, animated as a, config } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
 import { markUserComplete } from "../api/roundUserApi";
 
@@ -64,12 +64,13 @@ const Swipe: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
-  const { roundId, roundUserId } = location.state || {
-    roundId: 1,
-    roundUserId: 999,
-  };
+  // const { roundId, roundUserId } = location.state || {
+  //   roundId: 1,
+  //   roundUserId: 999,
+  // };
+  const roundId = parseInt(useParams().roundId || "-1");
 
   useEffect(() => {
     const loadCards = async () => {
@@ -93,10 +94,10 @@ const Swipe: React.FC = () => {
   }, [roundId]);
 
   useEffect(() => {
-    if (!isLoading && cards.length === 0 && roundUserId) {
+    if (!isLoading && cards.length === 0) {
       const complete = async () => {
         try {
-          await markUserComplete(roundUserId);
+          await markUserComplete(roundId);
           navigate("/waitingresult", { state: { roundId } });
         } catch (e) {
           console.error("Error marking complete:", e);
@@ -104,7 +105,7 @@ const Swipe: React.FC = () => {
       };
       complete();
     }
-  }, [cards, isLoading, roundUserId, roundId, navigate]);
+  }, [cards, isLoading, roundId, navigate]);
 
   const handleSwipe = (dir: "left" | "right", id: number) => {
     setCards((prev) => prev.filter((card) => card.id !== id));
