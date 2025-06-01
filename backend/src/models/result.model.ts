@@ -1,15 +1,25 @@
 import { db } from "../index.ts";
 
 export const createResult = async (roundId: number, userId: number, itemId: number) => {
-  return db.result.create({
-    data: {
-      RoundId: roundId,
-      UserId: userId,
-      ItemId: itemId,
-    },
-  });
-};
-
+    // ตรวจสอบว่า UserId มีอยู่ใน Users table หรือไม่
+    const userExists = await db.users.findUnique({
+      where: { id: userId },
+    });
+  
+    if (!userExists) {
+      throw new Error(`User with ID ${userId} does not exist`);
+    }
+  
+    // ถ้า UserId ถูกต้อง ให้สร้างข้อมูลใน Result
+    return db.result.create({
+      data: {
+        RoundId: roundId,
+        UserId: userId,
+        ItemId: itemId,
+      },
+    });
+  };
+  
 export const getMatchSummary = async (roundId: number) => {
   const results = await db.result.findMany({
     where: { RoundId: roundId },

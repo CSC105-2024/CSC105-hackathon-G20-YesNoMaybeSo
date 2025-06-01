@@ -4,6 +4,7 @@ import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
+import { sendLike } from "../api/resultApi";
 import { markUserComplete } from "../api/roundUserApi";
 
 interface CardData {
@@ -16,7 +17,11 @@ const Card: React.FC<{
   onSwipe: (dir: "left" | "right", id: number) => void;
   triggerSwipe: (swipeFunc: (dir: "left" | "right") => void) => void;
 }> = ({ card, onSwipe, triggerSwipe }) => {
-  const [{ x, rot, opacity }, api] = useSpring(() => ({ x: 0, rot: 0, opacity: 1 }));
+  const [{ x, rot, opacity }, api] = useSpring(() => ({
+    x: 0,
+    rot: 0,
+    opacity: 1,
+  }));
 
   const swipe = (dir: "left" | "right") => {
     const multiplier = dir === "right" ? 1 : -1;
@@ -61,11 +66,7 @@ const Swipe: React.FC = () => {
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { roundId, roundUserId } = location.state || {
-    roundId: 1,
-    roundUserId: 999,
-  };
+  const { roundId, userId, roundUserId } = location.state || {};
 
   useEffect(() => {
     const loadCards = async () => {
@@ -78,8 +79,8 @@ const Swipe: React.FC = () => {
           }));
           setCards(formatted);
         }
-      } catch (err) {
-        console.error("Error loading cards:", err);
+      } catch (e) {
+        console.error("Error loading cards:", e);
       } finally {
         setIsLoading(false);
       }
@@ -88,22 +89,25 @@ const Swipe: React.FC = () => {
     loadCards();
   }, [roundId]);
 
-  useEffect(() => {
-    if (!isLoading && cards.length === 0 && roundUserId) {
-      const complete = async () => {
-        try {
-          await markUserComplete(roundUserId);
-          navigate("/waitingresult", { state: { roundId } });
-        } catch (e) {
-          console.error("Error marking complete:", e);
-        }
-      };
-      complete();
-    }
-  }, [cards, isLoading, roundUserId, roundId, navigate]);
+  const handleSwipe = async (dir: "left" | "right", itemId: number) => {
+    setCards((prev) => prev.filter((card) => card.id !== itemId));
 
-  const handleSwipe = (dir: "left" | "right", id: number) => {
-    setCards((prev) => prev.filter((card) => card.id !== id));
+    if (dir === "right") {
+      try {
+        await sendLike(roundId, userId, itemId);
+      } catch (e) {
+        console.error("error sending like:", e);
+      }
+    }
+
+    if (cards.length === 1) {
+      try {
+        await markUserComplete(roundUserId);
+        navigate("/waitingresult", { state: { roundId } });
+      } catch (e) {
+        console.error("error marking complete:", e);
+      }
+    }
   };
 
   const triggerSwipe = (func: (dir: "left" | "right") => void) => {
@@ -121,7 +125,6 @@ const Swipe: React.FC = () => {
         </button>
 
         <div className="relative rounded-2xl w-full h-full">
-          {/* Stacked card background with light shadows */}
           <div className="absolute rounded-2xl w-full h-full bg-white rotate-12 shadow-sm" />
           <div className="absolute rounded-2xl w-full h-full bg-white rotate-6 shadow-sm" />
           <div className="absolute rounded-2xl w-full h-full bg-white shadow" />

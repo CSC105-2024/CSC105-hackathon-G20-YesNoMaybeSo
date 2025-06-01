@@ -47,3 +47,11 @@ export const getMatchSummary = async (roundId: number) => {
     };
   }
 };
+
+export const sendLike = async (roundId: number, userId: number, itemId: number) => {
+  return Axios.post(
+    "/result/add",
+    { roundId, userId, itemId },
+    { withCredentials: true }
+  );
+};
