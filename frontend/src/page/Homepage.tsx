@@ -1,5 +1,5 @@
-import React from 'react'
-import NavBar from '../components/NavBar'
+import React from "react";
+import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 
 function Homepage() {
@@ -12,7 +12,7 @@ function Homepage() {
       </div>
 
       <NavBar />
-      <div className='flex justify-center min-h-svh'>
+      <div className="flex justify-center min-h-svh">
         <div className="flex justify-center items-center">
           <div className="flex justify-center items-center">
             <div className="flex flex-col gap-6">
@@ -24,17 +24,17 @@ function Homepage() {
               </button>
 
               <button
-                onClick={() => navigate("/waiting")}
+                onClick={() => navigate("/waitingroom")}
                 className="bg-white text-black font-semibold px-12 py-15 rounded-lg shadow border hover:bg-gray-100 transition"
               >
                 Join
               </button>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </>
   );
 }
 
-export default Homepage
+export default Homepage;

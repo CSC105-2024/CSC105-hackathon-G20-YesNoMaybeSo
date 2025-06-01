@@ -3,11 +3,12 @@ import { Hono } from "hono";
 import { PrismaClient } from "./generated/prisma/index.js";
 import { cors } from "hono/cors";
 import { mainRouter } from "./routes/index.routes.ts";
+import { logger } from "hono/logger";
 
 const app = new Hono();
 
 export const db = new PrismaClient();
-
+app.use(logger());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -31,6 +32,6 @@ serve(
   }
 );
 
-process.on('beforeExit', async () => {
-  await db.$disconnect()
-})
+process.on("beforeExit", async () => {
+  await db.$disconnect();
+});

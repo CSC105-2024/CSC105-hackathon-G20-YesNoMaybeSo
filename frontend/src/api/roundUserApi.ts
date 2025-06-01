@@ -61,3 +61,37 @@ export const isUserInRound = async (roundId: number, userId: number) => {
     return { success: false, data: null };
   }
 };
+
+export type AvailableRound = {
+  id: number;
+  RoundId: number;
+  UserId: number;
+  isComplete: boolean;
+  isJoined: boolean;
+  Round: {
+    Group: {
+      GroupName: string;
+      User: {
+        Username: string;
+      };
+    };
+  };
+};
+
+export const getAvailableRounds = async () => {
+  try {
+    const res = await Axios.get("/rounduser/available");
+    return res.data.data as AvailableRound[];
+  } catch (e) {
+    return [];
+  }
+};
+
+export const joinUserToRound = async (roundUserId: number) => {
+  try {
+    const res = await Axios.post(`/rounduser/joinTo/${roundUserId}`);
+    return res.data.data.RoundId as number;
+  } catch (e) {
+    return -1;
+  }
+};
