@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
+import { logoutUser } from "../api/userApi";
 
 export default function NavBar() {
   const navigate = useNavigate();
   const [dropdownProfileOpen, setDropdownProfileOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutUser();
     navigate("/login");
   };
 

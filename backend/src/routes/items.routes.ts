@@ -6,4 +6,3 @@ export const itemRouter = new Hono();
 
 itemRouter.get("/:roundId", AuthMiddleWare, itemsController.getItemById);
 itemRouter.delete("/", AuthMiddleWare, itemsController.deleteItem);
-// itemRouter.get("/:roundId", AuthMiddleWare, itemsController.getItemsByRoundId);

@@ -4,5 +4,5 @@ import { AuthMiddleWare } from "../middlewares/auth.middlewares.ts";
 
 export const resultRouter = new Hono();
 
-resultRouter.post("/", AuthMiddleWare, resultController.createResult);
+resultRouter.post("/add", AuthMiddleWare, resultController.createResult);
 resultRouter.get("/summary/:roundId", AuthMiddleWare, resultController.getMatchSummary);

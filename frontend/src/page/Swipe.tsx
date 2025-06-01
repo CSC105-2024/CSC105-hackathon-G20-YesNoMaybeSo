@@ -4,6 +4,7 @@ import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
+import { sendLike } from "../api/resultApi";
 import { markUserComplete } from "../api/roundUserApi";
 
 interface CardData {
@@ -82,8 +83,8 @@ const Swipe: React.FC = () => {
             })
           );
         }
-      } catch (err) {
-        console.error("Error loading cards:", err);
+      } catch (e) {
+        console.error("Error loading cards:", e);
       } finally {
         setIsLoading(false);
       }

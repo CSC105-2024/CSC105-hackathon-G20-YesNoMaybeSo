@@ -20,13 +20,11 @@ const WaitingRoom = () => {
     }
   };
 
-
   useEffect(() => {
     fetchAvailableRound();
     const interval = setInterval(fetchAvailableRound, 2000);
     return () => clearInterval(interval);
   }, []);
-
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-xl text-primary">
@@ -36,16 +34,15 @@ const WaitingRoom = () => {
           return (
             <div
               key={i}
-              className="m-8 p-10 bg-primary rounded-2xl text-secondary hover:bg-accent text-center"
+              className="p-10 bg-secondary rounded-2xl text-center"
               onClick={() => joinRound(r.id)}
             >
-              <p className="font-bold text-2xl">Join : {r.Round.Group.GroupName}</p>
-              <p className="font-light">Invite by: {r.Round.Group.User.Username}</p>
+              <p className="font-bold text-2xl">{r.Round.Group.GroupName}</p>
+              <p className="font-light">By: {r.Round.Group.User.Username}</p>
             </div>
           );
         })}
       </div>
-  
     </div>
   );
 };

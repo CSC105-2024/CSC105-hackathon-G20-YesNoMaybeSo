@@ -27,7 +27,7 @@ const Participants: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await getprofile();
-      console.log("👤 profile response:", res);
+      console.log(res);
       const userId = res?.data?.data?.id;
       if (res.success && userId) {
         console.log("Set currentUserId to:", userId);

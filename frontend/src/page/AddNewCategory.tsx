@@ -71,7 +71,7 @@ const AddNewCategory: React.FC = () => {
         <div className="flex justify-center items-center">
           <div className="flex sm:w-[50%] w-[80%] min-h-15 justify-center bg-white rounded-2xl items-center my-12 gap-3 sm:flex-row flex-col">
             <div className="text-center justify-center text-primary text-2xl font-bold">
-              Category :
+              Room :
             </div>
             <input
               value={categoryName}
@@ -116,7 +116,7 @@ const AddNewCategory: React.FC = () => {
             onClick={handleSubmitCategory}
             className="sm:w-[50%] w-[80%] bg-accent hover:bg-[#F32322] text-white font-bold text-xl rounded-2xl h-14 flex items-center justify-center transition"
           >
-            Add Category
+            Add Room
           </button>
         </div>
       </div>
