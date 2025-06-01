@@ -74,7 +74,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/match",
+    path: "/match/:roundId",
     element: (
       <ProtectedRoute>
         <Match />
@@ -114,7 +114,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/waitingresult",
+    path: "/waitingresult/:roundId",
     element: (
       <ProtectedRoute>
         <WaitngResult />
