@@ -96,15 +96,15 @@ const Participants: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="w-screen h-full bg-secondary pb-8">
+      <div className="w-screen min-h-screen bg-secondary pb-8 justify-center items-center ">
         <div className="flex justify-center items-center">
-          <div className="flex sm:w-[50%] w-[80%] my-8 gap-3 sm:flex-row flex-col">
+          <div className="flex sm:w-[50%] w-[80%] my-8 gap-3 sm:flex-row flex-col justify-center">
             <div className="text-primary text-3xl font-bold">Participants</div>
           </div>
         </div>
 
         <div className="flex flex-col justify-center items-center gap-5 mt-4">
-          <div className="MiddleContainer gap-8 sm:w-[50%] w-[80%] max-h-[700px] overflow-y-auto bg-white rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
+          <div className="MiddleContainer gap-8 sm:w-[50%] w-[80%] h-[500px] overflow-y-auto bg-white rounded-2xl flex flex-col items-center py-10 px-4 shadow-xl">
             {users.length === 0 ? (
               <div className="text-xl text-gray-500">No participants yet</div>
             ) : (

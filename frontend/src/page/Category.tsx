@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { getGroupsByUser } from "../api/groupApi";
-import { getprofile, getuserid } from "../api/userApi";
+import { getuserid } from "../api/userApi";
 
 interface Group {
   GroupId: number;
