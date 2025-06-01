@@ -1,19 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSpring, animated as a, config } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getCardsByRoundId } from "../api/itemsApi";
+import { markUserComplete } from "../api/roundUserApi";
 
 interface CardData {
   id: number;
   text: string;
 }
-
-const initialCards: CardData[] = [
-  { id: 1, text: "takoyaki" },
-  { id: 2, text: "sushi" },
-  { id: 3, text: "ramen" },
-];
 
 const Card: React.FC<{
   card: CardData;
@@ -56,7 +52,7 @@ const Card: React.FC<{
     <a.div
       {...bind()}
       style={{ x, rotateZ: rot, opacity, touchAction: "none" }}
-      className="absolute w-[300px] h-[400px] bg-white rounded-xl shadow-xl flex items-center justify-center text-2xl font-bold cursor-grab"
+      className="absolute w-[300px] h-[400px] bg-white rounded-xl shadow-md flex items-center justify-center text-2xl font-bold cursor-grab"
     >
       {card.text}
     </a.div>
@@ -64,24 +60,53 @@ const Card: React.FC<{
 };
 
 const Swipe: React.FC = () => {
-  const [cards, setCards] = useState<CardData[]>(initialCards);
-  const [liked, setLiked] = useState<number[]>([]);
+  const [cards, setCards] = useState<CardData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  React.useEffect(() => {
-    if (cards.length === 0) {
-      const timer = setTimeout(() => {
-        navigate("/waitingresult");
-      }, 1500);
-      return () => clearTimeout(timer);
+  const { roundId, roundUserId } = location.state || {
+    roundId: 1,
+    roundUserId: 999,
+  };
+
+  useEffect(() => {
+    const loadCards = async () => {
+      try {
+        const res = await getCardsByRoundId(roundId);
+        if (res.success) {
+          const formatted = res.data.map((item: any) => ({
+            id: item.Item.id,
+            text: item.Item.ItemName,
+          }));
+          setCards(formatted);
+        }
+      } catch (err) {
+        console.error("Error loading cards:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadCards();
+  }, [roundId]);
+
+  useEffect(() => {
+    if (!isLoading && cards.length === 0 && roundUserId) {
+      const complete = async () => {
+        try {
+          await markUserComplete(roundUserId);
+          navigate("/waitingresult", { state: { roundId } });
+        } catch (e) {
+          console.error("Error marking complete:", e);
+        }
+      };
+      complete();
     }
-  }, [cards, navigate]);
+  }, [cards, isLoading, roundUserId, roundId, navigate]);
 
   const handleSwipe = (dir: "left" | "right", id: number) => {
-    if (dir === "right") {
-      setLiked((prev) => [...prev, id]);
-    }
     setCards((prev) => prev.filter((card) => card.id !== id));
   };
 
@@ -94,14 +119,16 @@ const Swipe: React.FC = () => {
       <div className="relative w-[300px] h-[400px] flex items-center justify-center mb-8">
         <button
           onClick={() => swipeFuncRef.current?.("left")}
-          className="hidden md:flex absolute top-2/5 left-[-50%] z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
+          className="hidden md:flex absolute top-2/5 left-[-50%] z-10 border-2 border-accent text-accent p-2 rounded-full"
         >
           <GoChevronLeft size={24} />
         </button>
-        <div className="realative rounded-2xl w-full h-full bg-white shadow">
-          <div className="absolute rounded-2xl w-full h-full bg-white rotate-12 shadow"></div>
-          <div className="absolute rounded-2xl w-full h-full bg-white rotate-6 shadow"></div>
-          <div className="absolute rounded-2xl w-full h-full bg-white rotate- shadow"></div>
+
+        <div className="relative rounded-2xl w-full h-full">
+          <div className="absolute rounded-2xl w-full h-full bg-white rotate-12 shadow-sm" />
+          <div className="absolute rounded-2xl w-full h-full bg-white rotate-6 shadow-sm" />
+          <div className="absolute rounded-2xl w-full h-full bg-white shadow" />
+
           {cards.map((card, index) => (
             <Card
               key={card.id}
@@ -114,25 +141,26 @@ const Swipe: React.FC = () => {
               }}
             />
           ))}
-          {cards.length === 0 && (
+
+          {!isLoading && cards.length === 0 && (
             <div className="absolute w-full h-full flex items-center justify-center text-lg text-gray-500 font-medium">
               All Done!!
             </div>
           )}
         </div>
+
         <button
           onClick={() => swipeFuncRef.current?.("right")}
-          className="hidden md:flex absolute top-2/5 right-[-50%] z-10 border-3 border-accent text-accent sm:p-2 p-1 sm:ml-4 rounded-full"
+          className="hidden md:flex absolute top-2/5 right-[-50%] z-10 border-2 border-accent text-accent p-2 rounded-full"
         >
           <GoChevronRight size={24} />
         </button>
       </div>
+
       <div className="mt-6 text-center">
         <div className="text-primary text-xl">
           Swipe right if your heart says yes, left if it whispers no.
         </div>
-        {/* <p className="text-gray-700 font-medium">Liked IDs:</p>
-          <p>{liked.length ? liked.join(", ") : "none"}</p> */}
       </div>
     </div>
   );

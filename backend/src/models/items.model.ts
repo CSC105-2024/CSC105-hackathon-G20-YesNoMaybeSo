@@ -17,3 +17,14 @@ export const deleteItem = async (itemId: number) => {
     })
     return deleteItems;
 };
+
+export const getItemsByRoundId = async (groupItemId: number) => {
+  return db.groupItem.findMany({
+    where: { 
+        GroupId: groupItemId 
+    },
+    include: {
+      Item: true,
+    },
+  });
+};

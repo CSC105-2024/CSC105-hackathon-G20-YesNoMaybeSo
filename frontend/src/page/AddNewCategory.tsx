@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/NavBar";
+import { getuserid } from "../api/userApi";
+import { createCategory, addCategoryItem } from "../api/groupApi";
+import { useNavigate } from "react-router-dom";
 
 interface Item {
   id: number;
@@ -10,6 +13,7 @@ const AddNewCategory: React.FC = () => {
   const [item, setItems] = useState<Item[]>([]);
   const [nextId, setNextId] = useState(1);
   const [categoryName, setCategoryName] = useState("");
+  const navigate = useNavigate();
 
   const handleItem = () => {
     const newItem: Item = {
@@ -30,14 +34,34 @@ const AddNewCategory: React.FC = () => {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleSubmitCategory = () => {
-    const data = {
-      categoryName: categoryName || "Untitled",
-      items: item.filter((i) => i.title.trim() !== ""),
-    };
+  const handleSubmitCategory = async () => {
+    if (!categoryName.trim()) return;
 
-    console.log("Category Data:", data);
-    //Axios.post("/api/category", data)
+    const profile = await getuserid();
+    const userId = profile?.user?.id;
+
+    if (!profile.success || !userId) {
+      console.error("User not logged in");
+      return;
+    }
+
+    const groupRes = await createCategory(categoryName, userId);
+    if (!groupRes.success) {
+      console.error("Failed to create category");
+      return;
+    }
+
+    const groupId = groupRes.data.GroupId;
+    const validItems = item.filter((i) => i.title.trim());
+
+    for (const i of validItems) {
+      await addCategoryItem(groupId, i.title);
+    }
+
+    setCategoryName("");
+    setItems([]);
+    setNextId(1);
+    navigate(`/entermember/${groupId}`);
   };
 
   return (
@@ -45,7 +69,7 @@ const AddNewCategory: React.FC = () => {
       <Navbar />
       <div className="w-screen h-full bg-secondary pb-8">
         <div className="flex justify-center items-center">
-          <div className="flex sm:w-[50%] w-[80%] min-h-15 justify-center bg-white rounded-2xl items-center  my-12 gap-3 sm:flex-row flex-col">
+          <div className="flex sm:w-[50%] w-[80%] min-h-15 justify-center bg-white rounded-2xl items-center my-12 gap-3 sm:flex-row flex-col">
             <div className="text-center justify-center text-primary text-2xl font-bold">
               Category :
             </div>

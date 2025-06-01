@@ -43,3 +43,48 @@ export const getprofile = async () => {
     };
   }
 };
+
+export const getProfile = async () => {
+  const data = await Axios.get("/user/getprofile", { withCredentials: true });
+  return data.data;
+};
+
+export const updateUsername = async (newUsername: string) => {
+  const data = await Axios.put(
+    "/user/updateusername",
+    { username: newUsername },
+    { withCredentials: true }
+  );
+  return data.data;
+};
+
+export const getuserid = async () => {
+  try {
+    const response = await Axios.get("/user/getprofile", {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      user: response.data.data, 
+    };
+  } catch (e) {
+    return {
+      success: false,
+      user: null,
+    };
+  }
+};
+
+export const getUserIdByUsername = async (username: string) => {
+  try {
+    const res = await Axios.get(`/user/getusername?username=${username}`, {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      data: res.data.data,
+    };
+  } catch (e) {
+    return { success: false, data: null };
+  }
+};

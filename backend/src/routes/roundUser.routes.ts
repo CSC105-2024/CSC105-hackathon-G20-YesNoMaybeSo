@@ -10,3 +10,4 @@ roundUserRoute.get("/:roundId", AuthMiddleWare, roundUserController.getUsersInRo
 roundUserRoute.patch("/complete/:id", AuthMiddleWare, roundUserController.markUserComplete);
 roundUserRoute.patch("/join/:id", AuthMiddleWare, roundUserController.isUserJoined);
 roundUserRoute.get("/check", AuthMiddleWare, roundUserController.isUserInRound);
+roundUserRoute.get("/waitingstatus/:roundId", AuthMiddleWare, roundUserController.checkAllUserCompleted);
