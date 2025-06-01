@@ -22,7 +22,6 @@ export const Register = async (c: Context) => {
       return c.json(JsonResponse(false, "Missing Required Field"), 400);
     }
 
-    //Check the duplicated of user
     const user = await userModel.getUserByUsername(body.username);
 
     if (user) {

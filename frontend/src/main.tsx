@@ -5,7 +5,6 @@ import "./index.css";
 import Homepage from "./page/Homepage";
 import AddNewCategory from "./page/AddNewCategory";
 import CategoryItem from "./page/CategoryItem";
-import DirectSwipe from "./page/DirectSwipe";
 import EnterMember from "./page/EnterMember";
 import Login from "./page/Login";
 import Register from "./page/Register";
@@ -18,6 +17,7 @@ import WaitngResult from "./page/WaitingResult";
 import Category from "./page/Category";
 import ProtectedLanding from "./page/ProtectedLanding";
 import ProtectedRoute from "./components/ProtectedRoute";
+import WaitingRoom from "./page/WaitingRoom";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/categoryitem",
+    path: "/categoryitem/:id",
     element: (
       <ProtectedRoute>
         <CategoryItem />
@@ -49,15 +49,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/directswipe",
-    element: (
-      <ProtectedRoute>
-        <DirectSwipe />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/entermember",
+    path: "/entermember/:groupId",
     element: (
       <ProtectedRoute>
         <EnterMember />
@@ -73,7 +65,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/match",
+    path: "/match/:roundId",
     element: (
       <ProtectedRoute>
         <Match />
@@ -81,7 +73,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/participants",
+    path: "/participants/:roundId",
     element: (
       <ProtectedRoute>
         <Participants />
@@ -97,7 +89,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/swipe",
+    path: "/swipe/:roundId",
     element: (
       <ProtectedRoute>
         <Swipe />
@@ -113,7 +105,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/waitingresult",
+    path: "/waitingresult/:roundId",
     element: (
       <ProtectedRoute>
         <WaitngResult />
@@ -125,6 +117,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Category />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/waitingroom",
+    element: (
+      <ProtectedRoute>
+        <WaitingRoom />
       </ProtectedRoute>
     ),
   },

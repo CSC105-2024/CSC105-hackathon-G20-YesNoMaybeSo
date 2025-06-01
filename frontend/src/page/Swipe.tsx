@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSpring, animated as a, config } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
 import { sendLike } from "../api/resultApi";
 import { markUserComplete } from "../api/roundUserApi";
@@ -65,19 +65,23 @@ const Swipe: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { roundId, userId, roundUserId } = location.state || {};
+  const [liked, setLiked] = useState<number[]>([]);
+ 
+  const roundId = parseInt(useParams().roundId || "-1");
 
   useEffect(() => {
     const loadCards = async () => {
       try {
         const res = await getCardsByRoundId(roundId);
         if (res.success) {
-          const formatted = res.data.map((item: any) => ({
-            id: item.Item.id,
-            text: item.Item.ItemName,
-          }));
-          setCards(formatted);
+          setCards(
+            res.data.map((d: any) => {
+              return {
+                id: d.id,
+                text: d.ItemName,
+              };
+            })
+          );
         }
       } catch (e) {
         console.error("Error loading cards:", e);
@@ -87,28 +91,30 @@ const Swipe: React.FC = () => {
     };
 
     loadCards();
-  }, [roundId]);
+  }, []);
 
-  const handleSwipe = async (dir: "left" | "right", itemId: number) => {
-    setCards((prev) => prev.filter((card) => card.id !== itemId));
-
-    if (dir === "right") {
-      try {
-        await sendLike(roundId, userId, itemId);
-      } catch (e) {
-        console.error("error sending like:", e);
-      }
-    }
-
-    if (cards.length === 1) {
-      try {
-        await markUserComplete(roundUserId);
-        navigate("/waitingresult", { state: { roundId } });
-      } catch (e) {
-        console.error("error marking complete:", e);
-      }
+  const handleSendComplete = async () => {
+    try {
+      await markUserComplete(roundId, liked);
+      navigate(`/waitingresult/${roundId}`, { state: { roundId } });
+    } catch (e) {
+      console.error("Error marking complete:", e);
     }
   };
+
+  const handleSwipe = (dir: "left" | "right", id: number) => {
+    console.log(dir);
+    if (dir === "right") {
+      setLiked((prev) => [...prev, id]);
+    }
+    setCards((prev) => prev.filter((card) => card.id !== id));
+  };
+
+  useEffect(() => {
+    if (!isLoading && cards.length === 0) {
+      handleSendComplete();
+    }
+  }, [cards]);
 
   const triggerSwipe = (func: (dir: "left" | "right") => void) => {
     swipeFuncRef.current = func;

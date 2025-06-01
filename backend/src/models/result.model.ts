@@ -1,29 +1,23 @@
 import { db } from "../index.ts";
 
-export const createResult = async (roundId: number, userId: number, itemId: number) => {
-    // ตรวจสอบว่า UserId มีอยู่ใน Users table หรือไม่
-    const userExists = await db.users.findUnique({
-      where: { id: userId },
-    });
-  
-    if (!userExists) {
-      throw new Error(`User with ID ${userId} does not exist`);
-    }
-  
-    // ถ้า UserId ถูกต้อง ให้สร้างข้อมูลใน Result
-    return db.result.create({
-      data: {
-        RoundId: roundId,
-        UserId: userId,
-        ItemId: itemId,
-      },
-    });
-  };
-  
+export const createResult = async (
+  roundId: number,
+  userId: number,
+  itemId: number
+) => {
+  return db.result.create({
+    data: {
+      RoundId: roundId,
+      UserId: userId,
+      ItemId: itemId,
+    },
+  });
+};
+
 export const getMatchSummary = async (roundId: number) => {
   const results = await db.result.findMany({
     where: { RoundId: roundId },
-    include: { Item: true }
+    include: { Item: true },
   });
 
   const counts: any = {};
@@ -35,7 +29,7 @@ export const getMatchSummary = async (roundId: number) => {
       counts[item.id] = {
         id: item.id,
         name: item.ItemName,
-        count: 1
+        count: 1,
       };
     }
   }
@@ -44,7 +38,9 @@ export const getMatchSummary = async (roundId: number) => {
   const maxCount = Math.max(...summary.map((item: any) => item.count));
 
   return {
-    topMatched: summary.filter(item => item.count === maxCount),
-    others: summary.filter(item => item.count < maxCount).sort((a, b) => b.count - a.count)
+    topMatched: summary.filter((item) => item.count === maxCount),
+    others: summary
+      .filter((item) => item.count < maxCount)
+      .sort((a, b) => b.count - a.count),
   };
 };

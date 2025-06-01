@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import {
-  getMatchSummary,
-  type MatchSummary,
-  type MatchItem,
-} from "../api/resultApi";
+import { getMatchSummary, type MatchItem } from "../api/resultApi";
+import { useParams } from "react-router-dom";
 
 const Match: React.FC = () => {
   const [summary, setSummary] = useState<MatchItem[] | null>(null);
+  const roundId = parseInt(useParams().roundId || "-1");
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const res = await getMatchSummary(1); // or dynamic roundId
+      if (!roundId) return;
+      const res = await getMatchSummary(roundId);
       if (res.success) {
         setSummary(res.data);
       }
@@ -36,13 +35,17 @@ const Match: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row justify-center items-center lg:items-end gap-10 lg:gap-40 max-w-9xl">
           <div className="flex justify-center items-end gap-2 sm:gap-4 md:gap-6 scale-[0.9] sm:scale-100">
-            {summary?.slice(0, 3).map((item, index) => {
+            {[1, 0, 2].map((rankIndex) => {
+              const item = summary?.[rankIndex];
+              if (!item) return null;
+
               const podiumStyle =
-                index === 0
-                  ? "bg-accent h-[180px] sm:h-[270px] md:h-[350px] text-white"
-                  : index === 1
+                rankIndex === 0
+                  ? "bg-accent h-[180px] sm:h-[270px] md:h-[350px] w-[130px] text-white"
+                  : rankIndex === 1
                   ? "bg-primary h-[140px] sm:h-[200px] md:h-[250px] text-white"
                   : "bg-[#FEE6E9] h-[120px] sm:h-[160px] md:h-[200px]";
+
               return (
                 <div key={item.id} className="flex flex-col items-center">
                   <div className="text-base sm:text-lg md:text-xl text-primary font-bold">
@@ -62,27 +65,29 @@ const Match: React.FC = () => {
           </div>
 
           <div className="w-full flex justify-center items-center">
-            <table className="w-full max-w-[320px] sm:w-[300px] text-left shadow-xl rounded-xl overflow-hidden bg-white">
-              <thead className="bg-secondary text-primary">
-                <tr>
-                  <th className="px-4 py-2 text-center">No.</th>
-                  <th className="px-4 py-2 text-center">Name</th>
-                  <th className="px-4 py-2 text-center">Match</th>
-                </tr>
-              </thead>
-              <tbody>
-                {summary?.map((item, index) => (
-                  <tr
-                    key={item.id}
-                    className={index % 2 === 1 ? "bg-red-50" : ""}
-                  >
-                    <td className="px-4 py-2 text-center">{index + 4}</td>
-                    <td className="px-4 py-2 text-center">{item.name}</td>
-                    <td className="px-4 py-2 text-center">{item.count}</td>
+            <div className="max-h-[450px] overflow-y-auto rounded-xl shadow-xl">
+              <table className="w-full max-w-[320px] sm:w-[300px] text-left bg-white">
+                <thead className="bg-secondary text-primary sticky top-0">
+                  <tr>
+                    <th className="px-4 py-2 text-center">No.</th>
+                    <th className="px-4 py-2 text-center">Name</th>
+                    <th className="px-4 py-2 text-center">Match</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {summary?.slice(3).map((item, index) => (
+                    <tr
+                      key={item.id}
+                      className={index % 2 === 1 ? "bg-red-50" : ""}
+                    >
+                      <td className="px-4 py-2 text-center">{index + 4}</td>
+                      <td className="px-4 py-2 text-center">{item.name}</td>
+                      <td className="px-4 py-2 text-center">{item.count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

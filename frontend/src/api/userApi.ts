@@ -57,3 +57,48 @@ export const updateUsername = async (newUsername: string) => {
   );
   return data.data;
 };
+
+export const getuserid = async () => {
+  try {
+    const response = await Axios.get("/user/getprofile", {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      user: response.data.data, 
+    };
+  } catch (e) {
+    return {
+      success: false,
+      user: null,
+    };
+  }
+};
+
+export const getUserIdByUsername = async (username: string) => {
+  try {
+    const res = await Axios.get(`/user/getusername?username=${username}`, {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      data: res.data.data,
+    };
+  } catch (e) {
+    return { success: false, data: null };
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    const res = await Axios.get("/auth/logout", {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (error) {
+    return {
+      success: false,
+      msg: "Logout failed",
+    };
+  }
+};
