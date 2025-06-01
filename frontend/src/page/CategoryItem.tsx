@@ -62,7 +62,7 @@ const CategoryItem: React.FC = () => {
       <div className="flex justify-center">
         <div className="bg-[#E74645] mt-6 w-[90%] md:w-[50%] h-[50px] flex justify-center rounded-2xl shadow-md hover:opacity-90 transition">
           <button
-            onClick={() => navigate("/entermember")}
+            onClick={() => navigate(`/entermember/${id}`)}
             className="text-center text-white text-xl font-bold"
           >
             Create Room

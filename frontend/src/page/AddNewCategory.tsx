@@ -61,7 +61,7 @@ const AddNewCategory: React.FC = () => {
     setCategoryName("");
     setItems([]);
     setNextId(1);
-    navigate("/entermember")
+    navigate(`/entermember/${groupId}`);
   };
 
   return (

@@ -74,3 +74,17 @@ export const getuserid = async () => {
     };
   }
 };
+
+export const getUserIdByUsername = async (username: string) => {
+  try {
+    const res = await Axios.get(`/user/getusername?username=${username}`, {
+      withCredentials: true,
+    });
+    return {
+      success: true,
+      data: res.data.data,
+    };
+  } catch (e) {
+    return { success: false, data: null };
+  }
+};

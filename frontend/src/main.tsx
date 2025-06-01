@@ -18,6 +18,7 @@ import WaitngResult from "./page/WaitingResult";
 import Category from "./page/Category";
 import ProtectedLanding from "./page/ProtectedLanding";
 import ProtectedRoute from "./components/ProtectedRoute";
+import WaitingRoom from "./page/WaitingRoom";
 
 const router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/entermember",
+    path: "/entermember/:groupId",
     element: (
       <ProtectedRoute>
         <EnterMember />
@@ -81,7 +82,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/participants",
+    path: "/participants/:roundId",
     element: (
       <ProtectedRoute>
         <Participants />
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/swipe",
+    path: "/swipe/:roundId",
     element: (
       <ProtectedRoute>
         <Swipe />
@@ -125,6 +126,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Category />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/waitingroom",
+    element: (
+      <ProtectedRoute>
+        <WaitingRoom />
       </ProtectedRoute>
     ),
   },

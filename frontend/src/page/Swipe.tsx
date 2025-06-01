@@ -16,7 +16,11 @@ const Card: React.FC<{
   onSwipe: (dir: "left" | "right", id: number) => void;
   triggerSwipe: (swipeFunc: (dir: "left" | "right") => void) => void;
 }> = ({ card, onSwipe, triggerSwipe }) => {
-  const [{ x, rot, opacity }, api] = useSpring(() => ({ x: 0, rot: 0, opacity: 1 }));
+  const [{ x, rot, opacity }, api] = useSpring(() => ({
+    x: 0,
+    rot: 0,
+    opacity: 1,
+  }));
 
   const swipe = (dir: "left" | "right") => {
     const multiplier = dir === "right" ? 1 : -1;
@@ -121,7 +125,6 @@ const Swipe: React.FC = () => {
         </button>
 
         <div className="relative rounded-2xl w-full h-full">
-          {/* Stacked card background with light shadows */}
           <div className="absolute rounded-2xl w-full h-full bg-white rotate-12 shadow-sm" />
           <div className="absolute rounded-2xl w-full h-full bg-white rotate-6 shadow-sm" />
           <div className="absolute rounded-2xl w-full h-full bg-white shadow" />

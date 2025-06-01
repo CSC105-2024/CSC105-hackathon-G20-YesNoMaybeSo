@@ -92,3 +92,4 @@ export const editUserName = async (c: Context) => {
         return c.json(JsonResponse(false, "Internal Server Error", e), 500);
     }
 }
+

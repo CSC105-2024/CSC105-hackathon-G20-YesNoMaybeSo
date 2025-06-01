@@ -9,9 +9,9 @@ export const addUserToRound = async (roundId: number, userId: number) => {
     });
 };
 
-export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
-    return Promise.all(userIds.map((userId) => addUserToRound(roundId, userId)));
-};
+// export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
+//     return Promise.all(userIds.map((userId) => addUserToRound(roundId, userId)));
+// };
 
 export const getUsersInRound = async (roundId: number) => {
     return db.round_User.findMany({
@@ -23,6 +23,20 @@ export const getUsersInRound = async (roundId: number) => {
         },
     });
 };
+
+export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
+  const userCreationTasks = userIds.map((uid) =>
+    db.round_User.create({
+      data: {
+        Round: { connect: { RoundId: roundId } },
+        User: { connect: { id: uid } },
+        isJoined: uid === userIds[0],
+      },
+    })
+  );
+  return await Promise.all(userCreationTasks);
+};
+
 
 export const markUserComplete = async (roundUserId: number) => {
 
