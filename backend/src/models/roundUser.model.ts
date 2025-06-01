@@ -38,10 +38,17 @@ export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
   return await Promise.all(userCreationTasks);
 };
 
-export const markUserComplete = async (roundUserId: number) => {
+export const markUserComplete = async (userId: number, roundId: number) => {
+  const roundUser = await db.round_User.findMany({
+    where: {
+      RoundId: roundId,
+      UserId: userId,
+    },
+  });
+  if (roundUser.length < 1) return false;
   await db.round_User.update({
     where: {
-      id: roundUserId,
+      id: roundUser[0].id,
     },
     data: {
       isComplete: true,
