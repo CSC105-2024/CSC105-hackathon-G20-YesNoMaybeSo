@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSpring, animated as a, config } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
+import { sendLike } from "../api/resultApi";
 import { markUserComplete } from "../api/roundUserApi";
 
 interface CardData {
@@ -65,12 +66,7 @@ const Swipe: React.FC = () => {
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
   const [liked, setLiked] = useState<number[]>([]);
-  // const location = useLocation();
-
-  // const { roundId, roundUserId } = location.state || {
-  //   roundId: 1,
-  //   roundUserId: 999,
-  // };
+ 
   const roundId = parseInt(useParams().roundId || "-1");
 
   useEffect(() => {
@@ -87,8 +83,8 @@ const Swipe: React.FC = () => {
             })
           );
         }
-      } catch (err) {
-        console.error("Error loading cards:", err);
+      } catch (e) {
+        console.error("Error loading cards:", e);
       } finally {
         setIsLoading(false);
       }

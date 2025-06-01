@@ -88,3 +88,17 @@ export const getUserIdByUsername = async (username: string) => {
     return { success: false, data: null };
   }
 };
+
+export const logoutUser = async () => {
+  try {
+    const res = await Axios.get("/auth/logout", {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (error) {
+    return {
+      success: false,
+      msg: "Logout failed",
+    };
+  }
+};

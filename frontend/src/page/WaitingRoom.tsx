@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { getuserid } from "../api/userApi";
-// import { getGroupsByUser } from "../api/groupApi";
-// import { getLatestRoundInGroup } from "../api/roundApi";
-// import { isUserInRound } from "../api/roundUserApi";
 import * as roundUserAPI from "../api/roundUserApi";
 
 const WaitingRoom = () => {
@@ -24,16 +20,11 @@ const WaitingRoom = () => {
     }
   };
 
-  // for polling
   useEffect(() => {
     fetchAvailableRound();
     const interval = setInterval(fetchAvailableRound, 2000);
     return () => clearInterval(interval);
   }, []);
-
-  // const handleRefresh = () => {
-  //   fetchAvailableRound();
-  // };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-xl text-primary">
@@ -52,9 +43,6 @@ const WaitingRoom = () => {
           );
         })}
       </div>
-      {/* <div className="BUTTON" onClick={handleRefresh}>
-        Refresh
-      </div> */}
     </div>
   );
 };

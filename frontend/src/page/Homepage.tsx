@@ -1,4 +1,3 @@
-import React from "react";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 
@@ -18,14 +17,14 @@ function Homepage() {
             <div className="flex flex-col gap-6">
               <button
                 onClick={() => navigate("/category")}
-                className="bg-white text-black font-semibold px-12 py-15 rounded-lg shadow border hover:bg-gray-100 transition"
+                className="bg-white text-black text-2xl font-semibold px-25 py-25 rounded-lg shadow hover:bg-gray-100 transition"
               >
                 Create
               </button>
 
               <button
                 onClick={() => navigate("/waitingroom")}
-                className="bg-white text-black font-semibold px-12 py-15 rounded-lg shadow border hover:bg-gray-100 transition"
+                className="bg-white text-black text-2xl font-semibold px-25 py-25 rounded-lg shado  hover:bg-gray-100 transition"
               >
                 Join
               </button>

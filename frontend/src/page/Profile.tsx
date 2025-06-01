@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import { FaRegUser } from "react-icons/fa";
 import { getProfile, updateUsername } from "../api/userApi";
 
 function Profile() {
-  const [user, setUser] = useState<{ id: number; username: string } | null>(null);
+  const [user, setUser] = useState<{ id: number; username: string } | null>(
+    null
+  );
   const [isEdit, setIsEdit] = useState(false);
   const [usernameInput, setUsernameInput] = useState("");
 
@@ -47,7 +49,9 @@ function Profile() {
 
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-4 items-center">
-                  <div className="text-xl font-semibold text-primary">User Name :</div>
+                  <div className="text-xl font-semibold text-primary">
+                    User Name :
+                  </div>
                   {isEdit ? (
                     <input
                       value={usernameInput}
@@ -62,8 +66,12 @@ function Profile() {
                 </div>
 
                 <div className="flex flex-row gap-4">
-                  <div className="text-xl font-semibold text-primary">User Id :</div>
-                  <div className="text-xl font-semibold text-primary">{user?.id ?? "-"}</div>
+                  <div className="text-xl font-semibold text-primary">
+                    User Id :
+                  </div>
+                  <div className="text-xl font-semibold text-primary">
+                    {user?.id ?? "-"}
+                  </div>
                 </div>
               </div>
             </div>

@@ -5,7 +5,6 @@ import "./index.css";
 import Homepage from "./page/Homepage";
 import AddNewCategory from "./page/AddNewCategory";
 import CategoryItem from "./page/CategoryItem";
-import DirectSwipe from "./page/DirectSwipe";
 import EnterMember from "./page/EnterMember";
 import Login from "./page/Login";
 import Register from "./page/Register";
@@ -46,14 +45,6 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CategoryItem />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/directswipe",
-    element: (
-      <ProtectedRoute>
-        <DirectSwipe />
       </ProtectedRoute>
     ),
   },

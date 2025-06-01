@@ -1,4 +1,3 @@
-import { count } from "console";
 import { db } from "../index.ts";
 
 export const addUserToRound = async (roundId: number, userId: number) => {
@@ -9,10 +8,6 @@ export const addUserToRound = async (roundId: number, userId: number) => {
     },
   });
 };
-
-// export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
-//     return Promise.all(userIds.map((userId) => addUserToRound(roundId, userId)));
-// };
 
 export const getUsersInRound = async (roundId: number) => {
   return db.round_User.findMany({

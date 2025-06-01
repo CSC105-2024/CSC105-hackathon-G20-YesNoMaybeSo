@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import * as roundUserAPI from "../api/roundUserApi";
 import { useNavigate, useParams } from "react-router-dom";
 
-function WaitngResult() {
+function WaitingResult() {
   const { roundId } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
@@ -25,4 +25,4 @@ function WaitngResult() {
   );
 }
 
-export default WaitngResult;
+export default WaitingResult;
