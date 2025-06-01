@@ -1,7 +1,11 @@
 import { Axios } from "../utils/axiosInstance";
 
 export const markUserComplete = async (id: number) => {
-  return await Axios.patch(`/rounduser/complete/${id}`, {}, { withCredentials: true });
+  return await Axios.patch(
+    `/rounduser/complete/${id}`,
+    {},
+    { withCredentials: true }
+  );
 };
 
 export const checkAllCompleted = async (roundId: number) => {
@@ -12,11 +16,48 @@ export const checkAllCompleted = async (roundId: number) => {
 };
 
 export const getCardsByRoundId = async (roundId: number) => {
-    try {
-      const res = await Axios.get(`/item/${roundId}`, { withCredentials: true });
-      return res.data;
-    } catch (e) {
-      console.error("Fetch item failed", e);
-      return { success: false, data: [] };
-    }
-  };
+  try {
+    const res = await Axios.get(`/item/${roundId}`, { withCredentials: true });
+    return res.data;
+  } catch (e) {
+    console.error("Fetch item failed", e);
+    return { success: false, data: [] };
+  }
+};
+
+export const waitingUserToJoin = async (roundId: number, userIds: number[]) => {
+  try {
+    const res = await Axios.post(
+      "/rounduser/waiting",
+      { roundId, userIds },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (e) {
+    return { success: false };
+  }
+};
+
+export const getUsersInRound = async (roundId: number) => {
+  try {
+    const res = await Axios.get(`/rounduser/${roundId}`, {
+      withCredentials: true,
+    });
+    return res.data; // ✅ ควรมี { success: true, data: [...] }
+  } catch (e) {
+    console.error("Error fetching users in round:", e);
+    return { success: false, data: [] };
+  }
+};
+
+export const isUserInRound = async (roundId: number, userId: number) => {
+  try {
+    const res = await Axios.get(
+      `/rounduser/check?roundId=${roundId}&userId=${userId}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (e) {
+    return { success: false, data: null };
+  }
+};

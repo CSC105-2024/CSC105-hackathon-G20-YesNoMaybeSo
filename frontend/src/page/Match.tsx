@@ -11,7 +11,7 @@ const Match: React.FC = () => {
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const res = await getMatchSummary(1); // or dynamic roundId
+      const res = await getMatchSummary(1);
       if (res.success) {
         setSummary(res.data);
       }
