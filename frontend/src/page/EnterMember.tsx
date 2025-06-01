@@ -85,10 +85,10 @@ const EnterMember: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="min-w-screen h-full bg-secondary pb-8">
+      <div className="min-h-screen h-full w-screen bg-secondary pb-8 text-center">
         <div className="flex justify-center items-center">
           <div className="flex sm:w-[50%] w-[80%] my-8 gap-3 sm:flex-row flex-col">
-            <div className="text-primary text-3xl font-bold">Member</div>
+            <div className="text-primary text-3xl font-bold w-screen text-center justify-center items-center">Member</div>
           </div>
         </div>
 
