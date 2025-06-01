@@ -114,7 +114,7 @@ const AddNewCategory: React.FC = () => {
 
           <button
             onClick={handleSubmitCategory}
-            className="sm:w-[50%] w-[80%] bg-accent hover:bg-[#F32322] text-white font-bold rounded-2xl h-14 flex items-center justify-center transition"
+            className="sm:w-[50%] w-[80%] bg-accent hover:bg-[#F32322] text-white font-bold text-xl rounded-2xl h-14 flex items-center justify-center transition"
           >
             Add Room
           </button>

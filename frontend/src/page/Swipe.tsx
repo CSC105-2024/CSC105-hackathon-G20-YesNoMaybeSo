@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSpring, animated as a, config } from "@react-spring/web";
 import { useGesture } from "@use-gesture/react";
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCardsByRoundId } from "../api/itemsApi";
 import { sendLike } from "../api/resultApi";
 import { markUserComplete } from "../api/roundUserApi";
