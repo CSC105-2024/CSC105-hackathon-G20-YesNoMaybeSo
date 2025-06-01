@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import { FaRegUser } from "react-icons/fa";
 import { getProfile, updateUsername } from "../api/userApi";
