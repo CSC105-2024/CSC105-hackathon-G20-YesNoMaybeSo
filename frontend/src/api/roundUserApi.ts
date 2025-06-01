@@ -45,7 +45,7 @@ export const getUsersInRound = async (roundId: number) => {
     const res = await Axios.get(`/rounduser/${roundId}`, {
       withCredentials: true,
     });
-    return res.data;
+    return res.data; // ✅ ควรมี { success: true, data: [...] }
   } catch (e) {
     console.error("Error fetching users in round:", e);
     return { success: false, data: [] };
