@@ -64,6 +64,7 @@ const Swipe: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const swipeFuncRef = useRef<null | ((dir: "left" | "right") => void)>(null);
   const navigate = useNavigate();
+  const [liked, setLiked] = useState<number[]>([]);
   // const location = useLocation();
 
   // const { roundId, roundUserId } = location.state || {
@@ -77,11 +78,14 @@ const Swipe: React.FC = () => {
       try {
         const res = await getCardsByRoundId(roundId);
         if (res.success) {
-          const formatted = res.data.map((item: any) => ({
-            id: item.Item.id,
-            text: item.Item.ItemName,
-          }));
-          setCards(formatted);
+          setCards(
+            res.data.map((d: any) => {
+              return {
+                id: d.id,
+                text: d.ItemName,
+              };
+            })
+          );
         }
       } catch (err) {
         console.error("Error loading cards:", err);
@@ -91,25 +95,30 @@ const Swipe: React.FC = () => {
     };
 
     loadCards();
-  }, [roundId]);
+  }, []);
+
+  const handleSendComplete = async () => {
+    try {
+      await markUserComplete(roundId, liked);
+      navigate(`/waitingresult/${roundId}`, { state: { roundId } });
+    } catch (e) {
+      console.error("Error marking complete:", e);
+    }
+  };
+
+  const handleSwipe = (dir: "left" | "right", id: number) => {
+    console.log(dir);
+    if (dir === "right") {
+      setLiked((prev) => [...prev, id]);
+    }
+    setCards((prev) => prev.filter((card) => card.id !== id));
+  };
 
   useEffect(() => {
     if (!isLoading && cards.length === 0) {
-      const complete = async () => {
-        try {
-          await markUserComplete(roundId);
-          navigate("/waitingresult", { state: { roundId } });
-        } catch (e) {
-          console.error("Error marking complete:", e);
-        }
-      };
-      complete();
+      handleSendComplete();
     }
-  }, [cards, isLoading, roundId, navigate]);
-
-  const handleSwipe = (dir: "left" | "right", id: number) => {
-    setCards((prev) => prev.filter((card) => card.id !== id));
-  };
+  }, [cards]);
 
   const triggerSwipe = (func: (dir: "left" | "right") => void) => {
     swipeFuncRef.current = func;

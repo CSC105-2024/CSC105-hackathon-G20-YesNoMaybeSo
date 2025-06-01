@@ -1,9 +1,11 @@
 import { Axios } from "../utils/axiosInstance";
 
-export const markUserComplete = async (id: number) => {
+export const markUserComplete = async (id: number, itemIds: number[]) => {
   return await Axios.patch(
     `/rounduser/complete/${id}`,
-    {},
+    {
+      items: itemIds,
+    },
     { withCredentials: true }
   );
 };
@@ -93,5 +95,15 @@ export const joinUserToRound = async (roundUserId: number) => {
     return res.data.data.RoundId as number;
   } catch (e) {
     return -1;
+  }
+};
+
+export const isAllUserCompleted = async (roundId: number) => {
+  try {
+    const res = await Axios.get(`/rounduser/isAllUserComplete/${roundId}`);
+
+    return res.data.data;
+  } catch (e) {
+    return false;
   }
 };

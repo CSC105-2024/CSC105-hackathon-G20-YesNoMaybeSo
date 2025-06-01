@@ -4,6 +4,6 @@ import { AuthMiddleWare } from "../middlewares/auth.middlewares.ts";
 
 export const itemRouter = new Hono();
 
-itemRouter.get("/", AuthMiddleWare, itemsController.getItemById);
+itemRouter.get("/:roundId", AuthMiddleWare, itemsController.getItemById);
 itemRouter.delete("/", AuthMiddleWare, itemsController.deleteItem);
-itemRouter.get("/:roundId", AuthMiddleWare, itemsController.getItemsByRoundId);
+// itemRouter.get("/:roundId", AuthMiddleWare, itemsController.getItemsByRoundId);
