@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import {
-  getMatchSummary,
-  type MatchItem,
-} from "../api/resultApi";
+import { getMatchSummary, type MatchItem } from "../api/resultApi";
+import { useParams } from "react-router-dom";
 
 const Match: React.FC = () => {
   const [summary, setSummary] = useState<MatchItem[] | null>(null);
+  const roundId = parseInt(useParams().roundId || "-1");
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const res = await getMatchSummary(1);
+      if (!roundId) return;
+      const res = await getMatchSummary(roundId);
       if (res.success) {
         setSummary(res.data);
       }

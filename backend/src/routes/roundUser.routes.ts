@@ -22,4 +22,9 @@ roundUserRoute.post(
   roundUserController.joinUserToAvailableRound
 );
 
+roundUserRoute.get(
+  "/isAllUserComplete/:roundId",
+  roundUserController.checkAllUserCompleted
+);
+
 roundUserRoute.get("/:roundId", roundUserController.getUsersInRound);

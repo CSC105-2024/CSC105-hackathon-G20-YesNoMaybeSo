@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import * as roundUserModel from "../models/roundUser.model.ts";
 import { JsonResponse } from "../utils/JsonResponse.ts";
-import { db } from "../index.ts";
+import * as resultModel from "../models/result.model.ts";
 
 type addUserToRoundBody = {
   roundId: number;
@@ -73,16 +73,32 @@ export const getUsersInRound = async (c: Context) => {
   }
 };
 
+type MarkUserCompletePayload = {
+  items: number[];
+};
+
 export const markUserComplete = async (c: Context) => {
   try {
-    const id = Number(c.req.param("id"));
+    const { items } = await c.req.json<MarkUserCompletePayload>();
+    const id = Number(c.req.param("id")); // id = roundId
     const userId = c.get("userId") as number;
     if (isNaN(id)) {
       return c.json(JsonResponse(false, "Invalid roundUserId"), 400);
     }
 
     const result = await roundUserModel.markUserComplete(userId, id);
-    return c.json(JsonResponse(true, "User completed!", result), 200);
+
+    const results = items.map((it) => resultModel.createResult(id, userId, it));
+
+    const completedResults = await Promise.all(results);
+
+    return c.json(
+      JsonResponse(true, "User completed!", {
+        roundUser: result,
+        result: completedResults,
+      }),
+      200
+    );
   } catch (e) {
     return c.json(JsonResponse(false, "Internal Server Error", e), 500);
   }
@@ -164,5 +180,21 @@ export const joinUserToAvailableRound = async (c: Context) => {
   } catch (e) {
     console.log(`${e}`);
     return c.json(JsonResponse(false, "Internal Server Error", e), 500);
+  }
+};
+
+export const isAllUserCompleted = async (c: Context) => {
+  try {
+    const roundId = parseInt(c.req.param("roundId"));
+    const allUserInround = await roundUserModel.getRoundUsers(roundId);
+    const incompleteUser = allUserInround.filter((u) => !u.isComplete);
+    return c.json(
+      JsonResponse(true, "Get round information completed", {
+        completed: incompleteUser.length === 0,
+      })
+    );
+  } catch (e) {
+    console.log(`${e}`);
+    return c.json(JsonResponse(false, "Internal SEำrver Error", e), 500);
   }
 };
