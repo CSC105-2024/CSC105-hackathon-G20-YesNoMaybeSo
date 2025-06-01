@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { getUsersInRound } from "../api/roundUserApi";
 import { getprofile } from "../api/userApi";
+import * as roundAPI from "../api/roundApi";
 
 interface User {
   id: number;
@@ -14,6 +15,10 @@ interface User {
 const Participants: React.FC = () => {
   const { roundId } = useParams();
   const navigate = useNavigate();
+
+  const [queryParam] = useSearchParams();
+
+  const isPlayer = queryParam.has("player");
 
   const [users, setUsers] = useState<User[]>([]);
   const [role, setRole] = useState<"host" | "player">("player");
@@ -57,6 +62,20 @@ const Participants: React.FC = () => {
     return () => clearInterval(interval);
   }, [roundId, currentUserId]);
 
+  const fetchRoundStatus = async () => {
+    if (!roundId) return;
+    const status = await roundAPI.isRoundStarted(parseInt(roundId));
+    if (status) {
+      navigate(`/swipe/${roundId}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoundStatus();
+    const interval = setInterval(fetchRoundStatus, 2000);
+    return () => clearInterval(interval);
+  }, [roundId, currentUserId]);
+
   useEffect(() => {
     if (!currentUserId || users.length === 0) return;
 
@@ -68,8 +87,10 @@ const Participants: React.FC = () => {
     console.log("Role updated to:", isHost ? "host" : "player");
   }, [users, currentUserId]);
 
-  const handleSwipe = () => {
-    if (roundId) navigate(`/swipe/${roundId}`);
+  const handleSwipe = async () => {
+    if (!roundId) return;
+    const res = await roundAPI.startRound(parseInt(roundId));
+    if (res) navigate(`/swipe/${roundId}`);
   };
 
   return (
@@ -118,7 +139,7 @@ const Participants: React.FC = () => {
             )}
           </div>
 
-          {role === "host" && (
+          {!isPlayer && (
             <button
               onClick={handleSwipe}
               className="sm:w-[50%] w-[80%] bg-accent hover:bg-[#F32322] text-white font-bold rounded-2xl h-14 flex items-center justify-center transition"
@@ -127,7 +148,7 @@ const Participants: React.FC = () => {
             </button>
           )}
 
-          {role === "player" && (
+          {isPlayer && (
             <div className="text-xl text-gray-600 font-medium">
               waiting for host to start...
             </div>

@@ -1,40 +1,60 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getuserid } from "../api/userApi";
-import { getGroupsByUser } from "../api/groupApi";
-import { getLatestRoundInGroup } from "../api/roundApi";
-import { isUserInRound } from "../api/roundUserApi";
+// import { getuserid } from "../api/userApi";
+// import { getGroupsByUser } from "../api/groupApi";
+// import { getLatestRoundInGroup } from "../api/roundApi";
+// import { isUserInRound } from "../api/roundUserApi";
+import * as roundUserAPI from "../api/roundUserApi";
 
 const WaitingRoom = () => {
   const navigate = useNavigate();
+  const [availableRounds, setAvailableRounds] = useState<
+    roundUserAPI.AvailableRound[]
+  >([]);
 
+  const fetchAvailableRound = async () => {
+    const rounds = await roundUserAPI.getAvailableRounds();
+    setAvailableRounds(rounds);
+  };
+
+  const joinRound = async (roundUserId: number) => {
+    const res = await roundUserAPI.joinUserToRound(roundUserId);
+    if (res != -1) {
+      navigate(`/participants/${res}?player`);
+    }
+  };
+
+  // for polling
   useEffect(() => {
-    const pollForRoom = async () => {
-      const profile = await getuserid();
-      const userId = profile.user?.id;
-      if (!userId) return;
-
-      const groups = await getGroupsByUser(userId);
-      for (const group of groups) {
-        const latest = await getLatestRoundInGroup(group.GroupId);
-        if (latest?.RoundId) {
-          const exists = await isUserInRound(latest.RoundId, userId);
-          if (exists.success && exists.data === true) {
-            navigate(`/participants/${latest.RoundId}`);
-            return;
-          }
-        }
-      }
-    };
-
-    pollForRoom();
-    const interval = setInterval(pollForRoom, 2000);
+    fetchAvailableRound();
+    const interval = setInterval(fetchAvailableRound, 2000);
     return () => clearInterval(interval);
-  }, [navigate]);
+  }, []);
+
+  // const handleRefresh = () => {
+  //   fetchAvailableRound();
+  // };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-xl text-primary">
-      Waiting for invitation to join a room...
+      <p>Waiting for invitation to join a room...</p>
+      <div>
+        {availableRounds.map((r, i) => {
+          return (
+            <div
+              key={i}
+              className="p-10 bg-secondary rounded-2xl text-center"
+              onClick={() => joinRound(r.id)}
+            >
+              <p className="font-bold text-2xl">{r.Round.Group.GroupName}</p>
+              <p className="font-light">By: {r.Round.Group.User.Username}</p>
+            </div>
+          );
+        })}
+      </div>
+      {/* <div className="BUTTON" onClick={handleRefresh}>
+        Refresh
+      </div> */}
     </div>
   );
 };

@@ -69,6 +69,7 @@ model Round_User {
   UserId     Int
   isComplete Boolean @default(false)
   isJoined   Boolean @default(false)
+  created_at DateTime @default(now())
 }
 
 model Result {
