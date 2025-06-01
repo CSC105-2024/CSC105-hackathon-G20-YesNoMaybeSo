@@ -141,7 +141,7 @@ const Participants: React.FC = () => {
 
           {!isPlayer && (
             <button
-              onClick={handleSwipe}
+              onClick={() => handleSwipe()}
               className="sm:w-[50%] w-[80%] bg-accent hover:bg-[#F32322] text-white font-bold rounded-2xl h-14 flex items-center justify-center transition"
             >
               Let&apos;s Swipe

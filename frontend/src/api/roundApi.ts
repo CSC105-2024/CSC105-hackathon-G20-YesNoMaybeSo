@@ -36,7 +36,7 @@ export const isRoundStarted = async (roundId: number) => {
 
 export const startRound = async (roundId: number) => {
   try {
-    const res = await Axios.patch(`/start/${roundId}`);
+    const res = await Axios.patch(`/round/start/${roundId}`);
     if (res.status < 300) return true;
     return false;
   } catch (e) {
